@@ -1,0 +1,27 @@
+import os
+import requests
+from instagrapi import Client
+from datetime import datetime
+
+USER = os.environ.get("INSTA_USER")
+PASS = os.environ.get("INSTA_PASS")
+TAG = "@mithilanchalwale #Mithila #AI"
+
+def run_bot():
+    try:
+        seed = datetime.now().timestamp()
+        # AI Image generator
+        img_url = f"https://image.pollinations.ai/prompt/mithila%20painting%20art%20culture%20mystery?seed={seed}"
+        img_data = requests.get(img_url).content
+        with open('post.jpg', 'wb') as f:
+            f.write(img_data)
+
+        cl = Client()
+        cl.login(USER, PASS)
+        cl.photo_upload("post.jpg", TAG)
+        print("Success!")
+    except Exception as e:
+        print(f"Error: {e}")
+
+if __name__ == "__main__":
+    run_bot()
